@@ -15,6 +15,28 @@ using namespace std;
 #define KEY_CYAN 53
 #define KEY_YELLOW 54
 
+int iLastX = -1;
+int iLastY = -1;
+
+
+
+
+
+
+/*===============================================
+ * ========= Update the trackbar values =========
+ * ============================================*/
+void changeTrackbarValues(int v1, int v2, int v3, int v4, int v5, int v6) {
+    cvSetTrackbarPos("LowH", "Control", v1);
+    cvSetTrackbarPos("HighH", "Control", v2);
+    cvSetTrackbarPos("LowS", "Control", v3);
+    cvSetTrackbarPos("HighS", "Control", v4);
+    cvSetTrackbarPos("LowV", "Control", v5);
+    cvSetTrackbarPos("HighV", "Control", v6);
+}
+
+
+
 /*===============================================
  * ========= Used for detecting key press =======
  * ============================================*/
@@ -39,17 +61,41 @@ char getch(void) {
     resetTermios();
     return ch;
 }
-
-/*===============================================
- * ========= Update the trackbar values =========
- * ============================================*/
-void changeTrackbarValues(int v1, int v2, int v3, int v4, int v5, int v6) {
-    cvSetTrackbarPos("LowH", "Control", v1);
-    cvSetTrackbarPos("HighH", "Control", v2);
-    cvSetTrackbarPos("LowS", "Control", v3);
-    cvSetTrackbarPos("HighS", "Control", v4);
-    cvSetTrackbarPos("LowV", "Control", v5);
-    cvSetTrackbarPos("HighV", "Control", v6);
+void checkKeyPress() {
+    switch (getch()) {
+        case KEY_RED:
+            cout << endl << "Red" << endl;
+            changeTrackbarValues(0, 94, 0, 36, 150, 255);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        case KEY_GREEN:
+            cout << endl << "Green" << endl;
+            changeTrackbarValues(0, 22, 232, 255, 0, 45);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        case KEY_BLUE:
+            cout << endl << "Blue" << endl;
+            changeTrackbarValues(164, 255, 0, 31, 0, 45);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        case KEY_MAGENTA:
+            cout << endl << "Magenta" << endl;
+            changeTrackbarValues(173, 255, 0, 255, 227, 255);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        case KEY_CYAN:
+            cout << endl << "Cyan" << endl;
+            changeTrackbarValues(177, 255, 58, 255, 0, 255);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        case KEY_YELLOW:
+            cout << endl << "Yellow" << endl;
+            changeTrackbarValues(0, 255, 204, 255, 90, 255);
+            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -86,58 +132,13 @@ int main(int argc, char **argv) {
     cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
     cvCreateTrackbar("HighV", "Control", &iHighV, 255);
 
-    char c = 0;
-
-    int iLastX = -1;
-    int iLastY = -1;
-
     while (1) {
-
-        switch ((c = getch())) {
-            case KEY_RED:
-                cout << endl << "Red" << endl;
-                changeTrackbarValues(0, 94, 0, 36, 150, 255);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            case KEY_GREEN:
-                cout << endl << "Green" << endl;
-                changeTrackbarValues(0, 22, 232, 255, 0, 45);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            case KEY_BLUE:
-                cout << endl << "Blue" << endl;
-                changeTrackbarValues(164, 255, 0, 31, 0, 45);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            case KEY_MAGENTA:
-                cout << endl << "Magenta" << endl;
-                changeTrackbarValues(173, 255, 0, 255, 227, 255);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            case KEY_CYAN:
-                cout << endl << "Cyan" << endl;
-                changeTrackbarValues(177, 255, 58, 255, 0, 255);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            case KEY_YELLOW:
-                cout << endl << "Yellow" << endl;
-                changeTrackbarValues(0, 255, 204, 255, 90, 255);
-                cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
-                c = 0;
-                break;
-            default:
-                c = 0;
-                break;
-        }
 
         Mat imageThresholded;
 
         inRange(image, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imageThresholded);
+
+        checkKeyPress();
 
         //Calculate the moments of the thresholded image
         Moments oMoments = moments(imageThresholded);
@@ -170,7 +171,6 @@ int main(int argc, char **argv) {
         imshow("Thresholded", imageThresholded);
 
         imshow("Original", image);
-
         char a = waitKey(33);
         if (a == 27) break;
     }
