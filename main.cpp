@@ -22,7 +22,6 @@ bool USING_CAM = false;
 
 
 
-
 /*===============================================
  * ========= Update the trackbar values =========
  * ============================================*/
@@ -94,14 +93,10 @@ void checkKeyPress() {
 
 
 int main(int argc, char **argv) {
-
     Mat image;
     String imageName("test.jpg");
     image = imread(imageName, CV_LOAD_IMAGE_COLOR);
     VideoCapture cap(0); //capture the video from web cam
-    //Create a black image with the size as the camera output
-    Mat imgLines = Mat::zeros(image.size(), CV_8UC3);
-
     if(!USING_CAM){
         if (image.empty()) {
             cout << "Could not open or find the image" << endl;
@@ -114,6 +109,10 @@ int main(int argc, char **argv) {
             return -1;
         }
     }
+
+    //Create a black image with the size as the camera output
+    Mat imgLines = Mat::zeros(image.size(), CV_8UC3);
+
 
     namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
