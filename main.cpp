@@ -18,7 +18,7 @@ using namespace std;
 int iLastX = -1;
 int iLastY = -1;
 
-
+bool USING_CAM = false;
 
 
 
@@ -94,17 +94,26 @@ void checkKeyPress() {
 
 
 int main(int argc, char **argv) {
-    String imageName("test.jpg");
 
     Mat image;
+    String imageName("test.jpg");
     image = imread(imageName, CV_LOAD_IMAGE_COLOR);
-    if (image.empty()) {
-        cout << "Could not open or find the image" << endl;
-        return -1;
-    }
-
+    VideoCapture cap(0); //capture the video from web cam
     //Create a black image with the size as the camera output
     Mat imgLines = Mat::zeros(image.size(), CV_8UC3);
+
+    if(!USING_CAM){
+        if (image.empty()) {
+            cout << "Could not open or find the image" << endl;
+            return -1;
+        }
+    } else {
+        if ( !cap.isOpened() )  // if not success, exit program
+        {
+            cout << "Cannot open the web cam" << endl;
+            return -1;
+        }
+    }
 
     namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
@@ -128,8 +137,18 @@ int main(int argc, char **argv) {
 
     while (1) {
 
-        Mat imageThresholded;
+        if(USING_CAM){
+            bool bSuccess = cap.read(image); // read a new frame from video
+            if (!bSuccess) //if not success, break loop
+            {
+                cout << "Cannot read a frame from video stream" << endl;
+                break;
+            }
+            Mat imgHSV;
+            cvtColor(image, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
+        }
 
+        Mat imageThresholded;
         inRange(image, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imageThresholded);
 
         checkKeyPress();
