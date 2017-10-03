@@ -35,3 +35,7 @@
 
 CMakeCache.txt
 CMakeFiles/
+
+main
+Makefile
+ipTest.cbp
