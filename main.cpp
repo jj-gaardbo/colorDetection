@@ -64,34 +64,28 @@ char getch(void) {
 void checkKeyPress() {
     switch (getch()) {
         case KEY_RED:
-            cout << endl << "Red" << endl;
             changeTrackbarValues(0, 94, 0, 36, 150, 255);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Red" << endl;
             break;
         case KEY_GREEN:
-            cout << endl << "Green" << endl;
             changeTrackbarValues(0, 22, 232, 255, 0, 45);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Green" << endl;
             break;
         case KEY_BLUE:
-            cout << endl << "Blue" << endl;
             changeTrackbarValues(164, 255, 0, 31, 0, 45);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Blue" << endl;
             break;
         case KEY_MAGENTA:
-            cout << endl << "Magenta" << endl;
             changeTrackbarValues(173, 255, 0, 255, 227, 255);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Magenta" << endl;
             break;
         case KEY_CYAN:
-            cout << endl << "Cyan" << endl;
             changeTrackbarValues(177, 255, 58, 255, 0, 255);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Cyan" << endl;
             break;
         case KEY_YELLOW:
-            cout << endl << "Yellow" << endl;
             changeTrackbarValues(0, 255, 204, 255, 90, 255);
-            cout << "X: " << iLastX << "\n" << "Y: " << iLastY << endl;
+            cout << endl << "Yellow" << endl;
             break;
         default:
             break;
@@ -155,6 +149,8 @@ int main(int argc, char **argv) {
                 //Draw a red line from the previous point to the current point
                 line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 0, 255), 2);
             }
+
+            cout << "X: " << posX << "\n" << "Y: " << posY << endl;
 
             iLastX = posX;
             iLastY = posY;
